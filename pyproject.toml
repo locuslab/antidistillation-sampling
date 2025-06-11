@@ -1,0 +1,24 @@
+[project]
+name = "ad-sampling"
+version = "0.1.0"
+description = "Add your description here"
+readme = "readme.md"
+requires-python = ">=3.12"
+dependencies = [
+    "accelerate>=1.5.2",
+    "datasets>=3.4.1",
+    "flash-attn>=2.7.4.post1",
+    "gpustat>=1.1.1",
+    "hydra-core>=1.3.2",
+    "ipdb>=0.13.13",
+    "jupyter>=1.1.1",
+    "math-verify>=0.7.0",
+    "nvitop>=1.4.2",
+    "peft>=0.15.0",
+    "ripgrep>=14.1.0",
+    "transformers>=4.50.0",
+    "trl>=0.16.0",
+    "typer>=0.15.2",
+    "wandb>=0.19.8",
+    "yq>=3.4.3",
+]

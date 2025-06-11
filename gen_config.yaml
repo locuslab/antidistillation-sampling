@@ -1,0 +1,42 @@
+# conf/config.yaml
+hydra:
+  run:
+    dir: ${exp_dir}/metadata/{now:yyyy-MM-dd_HH-mm-ss}  # Directory for metadata
+  output_subdir: null
+  job:
+    chdir: false
+
+seed: 42  # Random seed
+teacher: ${oc.env:TEACHER, "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B"}  # Teacher model
+tokenizer: ${teacher}  # Tokenizer for the teacher model
+teacher_cfg: null
+is_teacher: false
+
+# Antidistillation
+lam: 0.0
+wandb_lam: null # lam for color in wandb
+antidistillation: null # This will be set according to lam by the code.
+eps: 1e-2
+proxy_student: ${oc.env:PROXY_STUDENT, "Qwen/Qwen2.5-3B"}
+grad_path: null
+
+# Dataset 
+data_split: gsm8k_holdout  # Dataset split
+max_samples: null
+
+# Generation Parameters
+batch_size: 512  # Batch size
+max_length: 1024  # Maximum tokens for generation
+max_prompt_length: 512  # Maximum tokens for prompt
+tau: 0.0  # Temperature for sampling
+answer_force: true
+
+# Output
+use_wandb: false
+exp_dir: ${oc.env:EXP_DIR, "debug"}  # Output directory
+metadata_dir: ${exp_dir}/metadata  # Metadata directory
+trace_registry: ${metadata_dir}/trace_registry.jsonl  # Path to trace registry
+trace_dir: ${exp_dir}/traces  # Trace directory
+trace_name: REPLACE_ME 
+trace_path: ${trace_dir}/${trace_name}  # Path to save the dataset
+trace_colname: "trace"
