@@ -1,0 +1,5 @@
+logs/
+wandb/
+__pycache__/
+experiments/
+params_temp.txt

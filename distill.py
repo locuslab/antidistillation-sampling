@@ -33,6 +33,7 @@ import datasets
 import hydra
 import torch
 import yaml
+import socket
 from accelerate import Accelerator
 from hydra.core.hydra_config import HydraConfig
 from omegaconf import DictConfig, OmegaConf
@@ -97,7 +98,7 @@ def main(cfg: DictConfig):
         trace_cfg = SimpleNamespace(**trace_config)
 
     # Initialize random seeds for reproducibility
-    init(os.getenv("USER"), cfg.seed)
+    init(os.getenv("USER"), cfg.seed, "babel" in socket.gethostname())
 
     # Display configuration for debugging and reproducibility
     if accelerator.is_main_process:
@@ -194,7 +195,7 @@ def main(cfg: DictConfig):
                 # Split on assistant marker to get only the response portion
                 fixed_response = response.split("<｜Assistant｜>")[1]
                 # Replace custom EOS tokens with standard tokenizer EOS
-                fixed_response = fixed_response.replace("", tokenizer.eos_token)
+                fixed_response = fixed_response.replace("<｜end▁of▁sentence｜>", tokenizer.eos_token)
                 responses.append(fixed_response)
             
             # Create chat format messages for each example
@@ -321,7 +322,7 @@ def main(cfg: DictConfig):
     # Set up experiment tracking if Weights & Biases is enabled
     if accelerator.is_main_process and cfg.wandb:
         wandb_run = wandb.init(
-            project="antidistillation",
+            project="ADS",
             name=f"{cfg.exp_dir}/{cfg.model_name}",
             config={**cfg, "trace_config": trace_config},
         )

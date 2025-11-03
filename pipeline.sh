@@ -172,7 +172,7 @@ for taulameps in "${taulamepss[@]}"; do
     model_path="${exp_dir}/models/${model_name}"
     ad_traces="${exp_dir}/traces/tau${tau}_lam${lam}_eps${eps}"
     distill_sentinel="${model_path}/final"
-    cmd="$PY \
+    cmd="CUDA_LAUNCH_BLOCKING=1 $PY \
         distill.py \
         hydra.run.dir=${exp_dir}/metadata/distill/${model_name} \
         student=${student} \

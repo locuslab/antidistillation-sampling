@@ -28,6 +28,7 @@ import sys
 import datasets
 import torch
 import yaml
+import socket
 from accelerate import Accelerator
 from datasets import load_from_disk
 from rich import print as rprint
@@ -88,7 +89,7 @@ if __name__ == "__main__":
             setattr(args, key, value)
 
     # Initialize random seeds for reproducibility
-    init(os.getenv("USER"), args.seed)
+    init(os.getenv("USER"), args.seed, "babel" in socket.gethostname())
 
     # ============================================================================
     # TOKENIZER SETUP

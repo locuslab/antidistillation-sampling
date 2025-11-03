@@ -22,6 +22,7 @@ import ast
 import json
 import logging
 import os
+import socket
 import random
 import shutil
 import tempfile
@@ -172,7 +173,7 @@ def main(cfg: DictConfig):
         raise ValueError("Trace name must be specified")
 
     # Initialize random seeds and logging
-    init(os.getenv("USER"), cfg.seed)
+    init(os.getenv("USER"), cfg.seed, "babel" in socket.gethostname())
 
     if accelerator.is_main_process:
         content = Syntax(OmegaConf.to_yaml(cfg, resolve=True), 'yaml', theme="monokai")
