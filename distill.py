@@ -322,7 +322,7 @@ def main(cfg: DictConfig):
     # Set up experiment tracking if Weights & Biases is enabled
     if accelerator.is_main_process and cfg.wandb:
         wandb_run = wandb.init(
-            project="ADS",
+            project="antidistillation",
             name=f"{cfg.exp_dir}/{cfg.model_name}",
             config={**cfg, "trace_config": trace_config},
         )
