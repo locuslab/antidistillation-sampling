@@ -11,7 +11,9 @@ This repository implements the techniques described in the paper [Antidistillati
 ## Quick Start
 
 ```bash
-bash pipeline.sh
+# activate virtual environment
+# source .venv/bin/activate
+EXP_DIR=./experiments bash pipeline.sh
 ```
 
 This runs the complete antidistillation sampling pipeline with default settings.
