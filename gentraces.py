@@ -163,6 +163,14 @@ def main(cfg: DictConfig):
     # ============================================================================
     cfg.antidistillation = cfg.lam != 0
     cfg.wandb_lam = 1e-8 if cfg.lam == 0 else cfg.lam  # Wandb doesn't allow log scale for 0 values
+    cfg.hybrid_poisoning = bool(getattr(cfg, "hybrid_poisoning", False)) and cfg.antidistillation
+    if cfg.hybrid_poisoning:
+        cfg.hybrid_poisoning_prob = float(getattr(cfg, "hybrid_poisoning_prob", 0.5))
+        if not 0.0 < cfg.hybrid_poisoning_prob < 1.0:
+            raise ValueError("hybrid_poisoning_prob must be between 0 and 1 (exclusive)")
+        cfg.gaussian_noise_std = float(getattr(cfg, "gaussian_noise_std", 0.0))
+        if cfg.gaussian_noise_std <= 0:
+            raise ValueError("gaussian_noise_std must be > 0 when hybrid_poisoning is enabled")
     
     # Validate antidistillation requirements
     if cfg.antidistillation:
@@ -359,6 +367,8 @@ def main(cfg: DictConfig):
         
         The core formula is:
         new_logits = original_logits + (λ/(2ε)) * (student_logits - dstudent_logits)
+        When hybrid poisoning is enabled, each sample has a probability of
+        replacing the antidistillation term with Gaussian noise.
         
         Where:
         - λ (lam): controls strength of antidistillation 
@@ -366,12 +376,27 @@ def main(cfg: DictConfig):
         - student_logits: logits from +ε perturbed model
         - dstudent_logits: logits from -ε perturbed model
         """
-        def __init__(self, lam, eps, attention_mask, repetition_penalty):
+        def __init__(
+            self,
+            lam,
+            eps,
+            attention_mask,
+            repetition_penalty,
+            hybrid_poisoning=False,
+            gaussian_noise_std=0.0,
+            hybrid_probability=0.5,
+            rng_seed=0,
+        ):
             super().__init__()
             self.lam = lam
             self.eps = eps
             self.attention_mask = attention_mask
             self.repetition_penalty = repetition_penalty
+            self.hybrid_poisoning = hybrid_poisoning
+            self.gaussian_noise_std = gaussian_noise_std
+            self.hybrid_probability = hybrid_probability
+            self.strategy_mask = None
+            self._rng = random.Random(rng_seed)
 
         def __call__(self, input_ids: torch.LongTensor, scores: torch.FloatTensor) -> torch.FloatTensor:
             # Pad attention mask to match current sequence length
@@ -384,8 +409,19 @@ def main(cfg: DictConfig):
             # Compute antidistillation term using finite difference approximation
             ad_term = (self.lam / (2*self.eps)) * (out_target.float() - out_Dtarget.float())
 
-            # Add antidistillation term to original logits
-            scores = scores.float() + ad_term
+            scores = scores.float()
+            ad_term = ad_term.float()
+
+            if self.hybrid_poisoning:
+                if self.strategy_mask is None or self.strategy_mask.shape[0] != scores.shape[0]:
+                    mask = [self._rng.random() < self.hybrid_probability for _ in range(scores.shape[0])]
+                    self.strategy_mask = torch.tensor(mask, device=scores.device, dtype=torch.bool)
+                gaussian_noise = torch.randn_like(scores) * (self.lam * self.gaussian_noise_std)**2.0
+                mask = self.strategy_mask.view(-1, 1).float()
+                scores = scores + (1 - mask) * ad_term + mask * gaussian_noise
+            else:
+                # Add antidistillation term to original logits
+                scores = scores + ad_term
             
             return scores
 
@@ -406,7 +442,18 @@ def main(cfg: DictConfig):
                 top_p=0.95 if cfg.tau > 0 else None,
                 # Use antidistillation logits processor if enabled
                 logits_processor=(
-                    LogitsProcessorList([LogprobsModifier(cfg.lam, cfg.eps, batch["attention_mask"], cfg.repetition_penalty)])
+                    LogitsProcessorList([
+                        LogprobsModifier(
+                            cfg.lam,
+                            cfg.eps,
+                            batch["attention_mask"],
+                            cfg.repetition_penalty,
+                            hybrid_poisoning=cfg.hybrid_poisoning,
+                            gaussian_noise_std=getattr(cfg, "gaussian_noise_std", 0.0),
+                            hybrid_probability=getattr(cfg, "hybrid_poisoning_prob", 0.5),
+                            rng_seed=(cfg.seed or 0) + accelerator.process_index,
+                        )
+                    ])
                     if cfg.antidistillation else None
                 ),
                 renormalize_logits=True if cfg.antidistillation else False,

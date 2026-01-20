@@ -19,13 +19,16 @@ antidistillation: null # This will be set according to lam by the code.
 eps: 1e-2
 proxy_student: ${oc.env:PROXY_STUDENT, "Qwen/Qwen2.5-3B"}
 grad_path: null
+hybrid_poisoning: false
+hybrid_poisoning_prob: 0.5 # Probability of using Gaussian noise instead of ADS
+gaussian_noise_std: 1.0 # Stddev for Gaussian noise logits injection
 
-# Dataset 
-data_split: gsm8k_holdout  # Dataset split
-max_samples: null
+# Dataset
+data_split: mmlu_holdout  # Dataset split
+max_samples: 4096
 
 # Generation Parameters
-batch_size: 512  # Batch size
+batch_size: 8  # Batch size
 max_length: 1024  # Maximum tokens for generation
 max_prompt_length: 512  # Maximum tokens for prompt
 tau: 0.0  # Temperature for sampling
