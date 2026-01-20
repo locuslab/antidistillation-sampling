@@ -11,7 +11,7 @@ lines = []
 tau = 1.0
 eps = 1e-2
 
-for b in list(np.linspace(0, 15, 10)):
+for b in list(np.linspace(0, 15, 11)):
     lam = b * eps
     lines += [f"{tau:.2e} {lam:.2e} {eps:.2e}\n"]
 
