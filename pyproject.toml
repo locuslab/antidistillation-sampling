@@ -5,6 +5,7 @@ description = "Add your description here"
 readme = "readme.md"
 requires-python = "==3.12.*"
 dependencies = [
+    "torch>=2.4.0",
     "accelerate>=1.5.2",
     "datasets>=3.4.1",
     "flash-attn==2.7.3",
@@ -22,3 +23,7 @@ dependencies = [
     "wandb>=0.19.8",
     "yq>=3.4.3",
 ]
+
+
+[tool.uv.extra-build-dependencies]
+flash-attn = ["torch", "ninja", "packaging"]
