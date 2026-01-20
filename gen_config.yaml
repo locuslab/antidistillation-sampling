@@ -33,6 +33,7 @@ max_length: 1024  # Maximum tokens for generation
 max_prompt_length: 512  # Maximum tokens for prompt
 tau: 0.0  # Temperature for sampling
 answer_force: true
+repetition_penalty: 1.0
 
 # Output
 use_wandb: false
