@@ -5,7 +5,8 @@ description = "Add your description here"
 readme = "readme.md"
 requires-python = "==3.12.*"
 dependencies = [
-    "torch>=2.4.0",
+    "torch==2.4.0",
+    "flash-attn==2.7.3",
     "accelerate>=1.5.2",
     "datasets>=3.4.1",
     "flash-attn==2.7.3",
@@ -25,5 +26,5 @@ dependencies = [
 ]
 
 
-[tool.uv.extra-build-dependencies]
-flash-attn = ["torch", "ninja", "packaging"]
+[tool.uv.sources]
+flash-attn = { url = "https://github.com/Dao-AILab/flash-attention/releases/download/v2.7.3/flash_attn-2.7.3+cu123torch2.4cxx11abiFALSE-cp312-cp312-linux_x86_64.whl" }
