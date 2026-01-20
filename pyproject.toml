@@ -6,7 +6,7 @@ readme = "readme.md"
 requires-python = "==3.12.*"
 dependencies = [
     "torch==2.4.0",
-    "flash-attn==2.7.3",
+    "flash-attn==2.8.3",
     "accelerate>=1.5.2",
     "datasets>=3.4.1",
     "flash-attn==2.7.3",
