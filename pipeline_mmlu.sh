@@ -159,9 +159,8 @@ for taulameps in "${taulamepss[@]}"; do
         seed=${seed} \
         data_split=${dataset}_train \
         grad_path=${grad_path} \
-        batch_size=64 \
+        batch_size=32 \
         max_samples=2880 \
-        batch_size=256 \
         max_length=2048 \
         max_prompt_length=1024 \
         tau=${tau} \
@@ -213,7 +212,7 @@ for taulameps in "${taulamepss[@]}"; do
         seed=${seed} \
         data_split=${dataset}_test \
         max_samples=2880 \
-        batch_size=256 \
+        batch_size=32 \
         max_length=2048 \
         max_prompt_length=1024 \
         trace_name=${eval_traces}"
