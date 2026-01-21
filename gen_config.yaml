@@ -28,7 +28,7 @@ data_split: mmlu_holdout  # Dataset split
 max_samples: 4096
 
 # Generation Parameters
-batch_size: 8  # Batch size
+batch_size: 64  # Batch size
 max_length: 1024  # Maximum tokens for generation
 max_prompt_length: 512  # Maximum tokens for prompt
 tau: 0.0  # Temperature for sampling
