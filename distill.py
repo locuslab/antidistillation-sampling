@@ -135,6 +135,9 @@ def main(cfg: DictConfig):
         eos_token = tokenizer.eos_token
         special_tokens = {"pad_token": "[PAD]"}
         tokenizer.add_special_tokens(special_tokens)
+    elif "gemma" in cfg.tokenizer.lower():
+        tokenizer.pad_token = tokenizer.eos_token
+        tokenizer.padding_side = "left"
     else:
         raise ValueError(f"Unknown tokenizer {cfg.tokenizer}")
 
@@ -258,6 +261,8 @@ def main(cfg: DictConfig):
         response_string = "<|start_header_id|>assistant<|end_header_id|>\n\n"
     elif "qwen" in cfg.student.lower():
         response_string = "<|im_start|>assistant\n"
+    elif "gemma" in cfg.student.lower():
+        response_string = "<start_of_turn>model\n"
     else:
         raise ValueError(f"Unknown model {cfg.student}")
     
