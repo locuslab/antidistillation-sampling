@@ -7,8 +7,8 @@ holdout_traces: null  # Required, path to evaluation dataset
 max_length: 4096
 
 # Model
-student: meta-llama/Llama-3.2-3B
-tokenizer: meta-llama/Llama-3.2-3B-Instruct
+student: meta-llama/Llama-3.2-1B
+tokenizer: meta-llama/Llama-3.2-1B-Instruct
 checkpoint: null
 lora: true
 lora_r: 128
