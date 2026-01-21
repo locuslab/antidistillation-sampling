@@ -75,7 +75,7 @@ export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 # ================================================================================
 teacher="deepseek-ai/DeepSeek-R1-Distill-Qwen-7B"     # Large teacher model
 proxy_student="Qwen/Qwen2.5-1.5B"                       # Proxy student for gradient computation (same architecture as teacher so we can use the same tokenizer)
-student="meta-llama/Llama-3.2-1B"                     # Target student model attempting to distill from the teacher (different architecture to show that ADS works even when the student and teacher have different architectures)
+student="google/gemma-3-1b-it"                     # Target student model attempting to distill from the teacher (different architecture to show that ADS works even when the student and teacher have different architectures)
 
 # ================================================================================
 # STAGE EXECUTION HELPER FUNCTION
