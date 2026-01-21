@@ -25,7 +25,7 @@ gaussian_noise_std: 1.0 # Stddev for Gaussian noise logits injection
 
 # Dataset
 data_split: mmlu_holdout  # Dataset split
-max_samples: 2048
+max_samples: 128
 
 # Generation Parameters
 batch_size: 64  # Batch size
