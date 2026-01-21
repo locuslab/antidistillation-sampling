@@ -184,7 +184,7 @@ for taulameps in "${taulamepss[@]}"; do
         distill.py \
         hydra.run.dir=${exp_dir}/metadata/distill/${model_name} \
         student=${student} \
-        tokenizer=${student}-Instruct \
+        tokenizer=${student} \
         exp_dir=${exp_dir} \
         train_traces=${ad_traces} \
         holdout_traces=${holdout_sentinel} \
