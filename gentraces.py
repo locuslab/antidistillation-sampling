@@ -496,7 +496,8 @@ def main(cfg: DictConfig):
     response_strings = {
         "llama": "<|start_header_id|>assistant<|end_header_id|>\n\n",
         "qwen": "<|im_start|>assistant\n",
-        "r1": "<｜Assistant｜>"
+        "r1": "<｜Assistant｜>",
+        "gemma": "<start_of_turn>model\n",
     }
     response_string = None
     for _, value in response_strings.items():
