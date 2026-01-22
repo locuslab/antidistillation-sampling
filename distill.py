@@ -149,7 +149,7 @@ def main(cfg: DictConfig):
     student = AutoModelForCausalLM.from_pretrained(
         cfg.student,
         trust_remote_code=True,
-        attn_implementation="flash_attention_2",  # Use Flash Attention for efficiency
+        attn_implementation="eager" if "gemma" in cfg.student.lower() else "flash_attention_2",  # Use Flash Attention for efficiency
         torch_dtype=torch.bfloat16,  # Mixed precision for memory efficiency
         use_cache=True,
     )
