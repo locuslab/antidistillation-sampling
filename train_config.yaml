@@ -10,7 +10,7 @@ max_length: 4096
 student: google/gemma-3-1b-it
 tokenizer: google/gemma-3-1b-it
 checkpoint: null
-lora: true
+lora: false
 lora_r: 128
 lora_alpha: 128
 lora_dropout: 0.0
