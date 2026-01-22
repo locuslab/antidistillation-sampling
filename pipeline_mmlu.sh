@@ -114,7 +114,7 @@ cmd="$PY \
     exp_dir=${exp_dir} \
     seed=${seed} \
     data_split=${dataset}_holdout \
-    max_samples=128 \
+    max_samples=1024 \
     batch_size=64 \
     max_length=1024 \
     max_prompt_length=512 \
@@ -160,7 +160,7 @@ for taulameps in "${taulamepss[@]}"; do
         data_split=${dataset}_train \
         grad_path=${grad_path} \
         batch_size=64 \
-        max_samples=64 \
+        max_samples=1024 \
         batch_size=64 \
         max_length=2048 \
         max_prompt_length=1024 \
@@ -212,7 +212,7 @@ for taulameps in "${taulamepss[@]}"; do
         exp_dir=${exp_dir} \
         seed=${seed} \
         data_split=${dataset}_test \
-        max_samples=64 \
+        max_samples=256 \
         batch_size=64 \
         max_length=2048 \
         max_prompt_length=1024 \
@@ -240,7 +240,7 @@ for taulameps in "${taulamepss[@]}"; do
         data_split=${dataset}_test \
         grad_path=${grad_path} \
         batch_size=${batch_size} \
-        max_samples=64 \
+        max_samples=256 \
         max_length=2048 \
         max_prompt_length=1024 \
         tau=${tau} \
