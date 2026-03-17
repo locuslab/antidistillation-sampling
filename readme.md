@@ -6,7 +6,8 @@ This repository implements the techniques described in the paper [Antidistillati
 
 1. Install uv: https://docs.astral.sh/uv/getting-started/installation/
 2. Run `uv sync` to install dependencies
-3. Install flash-attention: `uv add flash-attn --no-build-isolation`
+3. Install flash-attention: `uv pip install flash-attn==2.7.4.post1 --no-build-isolation
+`
 
 ## Quick Start
 
